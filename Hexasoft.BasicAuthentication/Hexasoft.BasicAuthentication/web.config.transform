@@ -1,0 +1,12 @@
+<configuration>
+  <system.webServer>
+    <modules>
+      <add name="Hexasoft.BasicAuthentication" type="Hexasoft.BasicAuthentication" />
+    </modules>
+  </system.webServer>
+  <appSettings>
+    <add key="BasicAuthentication.Required" value="false" />
+    <add key="BasicAuthentication.Username" value="" />
+    <add key="BasicAuthentication.Password" value="" />
+  </appSettings>
+</configuration>
