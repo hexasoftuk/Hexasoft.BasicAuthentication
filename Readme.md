@@ -13,6 +13,19 @@ Download
 Hexasoft.BasicAuthentication is available as a NuGet package at [https://www.nuget.org/packages/Hexasoft.BasicAuthentication](https://www.nuget.org/packages/Hexasoft.BasicAuthentication)
 
 
+Usage
+-----
+After installing the package you will see 3 new settings in the `appSettings` section of your `Web.config`:
+
+    <add key="BasicAuthentication.Required" value="true" />
+    <add key="BasicAuthentication.Username" value="testuser" />
+    <add key="BasicAuthentication.Password" value="testpass" />
+
+Use the `BasicAuthentication.Required` to quickly turn the authentication on or off while the username/password settings are self explanatory. Username is case-insensitive, password is case-sensitive.
+
+As this module was meant to secure WebApi's behind an Azure API Management, it only supports one username/password combination. No support for multiple users,
+
+
 Version history
 ---------------
 
