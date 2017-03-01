@@ -1,15 +1,33 @@
 ﻿using System;
 using System.Configuration;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 
 namespace Hexasoft
 {
     public class BasicAuthentication : IHttpModule
     {
+        static Regex requirePathRegex;
+
         public void Init(HttpApplication context)
         {
             context.BeginRequest += ContextBeginRequest;
+
+            var regexRaw = ConfigurationManager.AppSettings["BasicAuthentication.RequiredOnPathRegex"];
+            var ignoreCaseRaw = ConfigurationManager.AppSettings["BasicAuthentication.RequiredOnPathRegex.IgnoreCase"];
+
+            if (!string.IsNullOrEmpty(regexRaw))
+            {
+                var options = RegexOptions.None;
+
+                if (string.Equals(ignoreCaseRaw, "true", StringComparison.InvariantCultureIgnoreCase) || ignoreCaseRaw == "1")
+                {
+                    options |= RegexOptions.IgnoreCase;
+                }
+
+                requirePathRegex = new Regex(regexRaw, options);
+            }
         }
 
         private void ContextBeginRequest(object sender, EventArgs e)
@@ -37,6 +55,10 @@ namespace Hexasoft
             {
                 requiredSetting = requiredSetting.Trim().ToLower();
                 required = requiredSetting == "1" || requiredSetting == "true";
+            }
+            else if (requirePathRegex != null)
+            {
+                required = requirePathRegex.IsMatch(HttpContext.Current.Request.Url.AbsolutePath);
             }
 
             return required;
